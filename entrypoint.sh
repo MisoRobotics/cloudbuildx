@@ -51,7 +51,11 @@ buildx inspect --bootstrap
 metadata_host=metadata.google.internal
 metadata_ip="$(dig +short "${metadata_host}")"
 
+if [ -z "${SSH_AUTH_SOCK}" ]; then
+	eval "$(ssh-agent -s)"
+fi
+
 echo "Invoking docker build with host entry ${metadata_host}:${metadata_ip}"
 buildx build \
 	--add-host "${metadata_host}:${metadata_ip}" \
-	--allow=network.host --network=host "$@"
+	--ssh=default --allow=network.host --network=host "$@"
