@@ -52,7 +52,9 @@ metadata_host=metadata.google.internal
 metadata_ip="$(dig +short "${metadata_host}")"
 
 if [ -z "${SSH_AUTH_SOCK}" ]; then
+	echo "Instantiating ssh-agent and adding default key."
 	eval "$(ssh-agent -s)"
+	ssh-add
 fi
 
 if [ -z "${DISABLE_SSH}" ]; then
