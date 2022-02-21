@@ -1,0 +1,7 @@
+--- # Build and test the cloudbuildx builder.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: [build, --tag=cloudbuildx, .]
+  - name: cloudbuildx
+    args: [--load, test]
+tags: [docker, buildkit, buildx, cloudbuildx]
