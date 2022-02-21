@@ -55,7 +55,11 @@ if [ -z "${SSH_AUTH_SOCK}" ]; then
 	eval "$(ssh-agent -s)"
 fi
 
+if [ -z "${DISABLE_SSH}" ]; then
+	ssh_args="--ssh=default"
+fi
+
 echo "Invoking docker build with host entry ${metadata_host}:${metadata_ip}"
 buildx build \
 	--add-host "${metadata_host}:${metadata_ip}" \
-	--ssh=default --allow=network.host --network=host "$@"
+	"${ssh_args}" --allow=network.host --network=host "$@"
