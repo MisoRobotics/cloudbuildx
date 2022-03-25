@@ -23,7 +23,7 @@
 # This script is intended for use on Google Cloud Build.
 network=cloudbuild
 binfmt_version=v0.8
-buildkit_version=v0.9.3
+buildkit_version=v0.10.0
 
 run_args="--privileged"
 driver_opts="image=moby/buildkit:${buildkit_version}"
@@ -51,14 +51,23 @@ buildx inspect --bootstrap
 metadata_host=metadata.google.internal
 metadata_ip="$(dig +short "${metadata_host}")"
 
-if [ -z "${SSH_AUTH_SOCK}" ]; then
-	echo "Instantiating ssh-agent and adding default key."
-	eval "$(ssh-agent -s)"
-	ssh-add
-fi
-
 if [ -z "${DISABLE_SSH}" ]; then
 	ssh_args="--ssh=default"
+
+	if [ -z "${SSH_AUTH_SOCK}" ]; then
+		echo "Instantiating ssh-agent and adding default key."
+		eval "$(ssh-agent -s)"
+		ssh-add
+	fi
+
+	if [ -n "${SSH_SECRET_ID}" ]; then
+		args="--secret=${SSH_SECRET_ID}"
+		if [ -n "${SSH_SECRET_PROJECT}" ]; then
+			args+=" --project=${SSH_SECRET_PROJECT}"
+		fi
+		gcloud secrets versions access latest ${args} > /root/.ssh/id_rsa
+		chmod 400 /root/.ssh/id_rsa
+	fi
 fi
 
 echo "Invoking docker build with host entry ${metadata_host}:${metadata_ip}"
