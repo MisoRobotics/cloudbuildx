@@ -63,7 +63,7 @@ if [ -z "${DISABLE_SSH}" ]; then
 	if [ -n "${SSH_SECRET_ID}" ]; then
 		args="--secret=${SSH_SECRET_ID}"
 		if [ -n "${SSH_SECRET_PROJECT}" ]; then
-			args+=" --project=${SSH_SECRET_PROJECT}"
+			args="${args} --project=${SSH_SECRET_PROJECT}"
 		fi
 		mkdir -m0700 -p ~/.ssh
 		gcloud secrets versions access latest ${args} > ~/.ssh/id_rsa
