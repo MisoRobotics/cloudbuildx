@@ -52,14 +52,6 @@ metadata_host=metadata.google.internal
 metadata_ip="$(dig +short "${metadata_host}")"
 
 if [ -z "${DISABLE_SSH}" ]; then
-	ssh_args="--ssh=default"
-
-	if [ -z "${SSH_AUTH_SOCK}" ]; then
-		echo "Instantiating ssh-agent and adding default key."
-		eval "$(ssh-agent -s)"
-		ssh-add
-	fi
-
 	if [ -n "${SSH_SECRET_ID}" ]; then
 		args="--secret=${SSH_SECRET_ID}"
 		if [ -n "${SSH_SECRET_PROJECT}" ]; then
@@ -69,6 +61,14 @@ if [ -z "${DISABLE_SSH}" ]; then
 		gcloud secrets versions access latest ${args} > ~/.ssh/id_rsa
 		chmod 400 ~/.ssh/id_rsa
 	fi
+
+	if [ -z "${SSH_AUTH_SOCK}" ]; then
+		echo "Instantiating ssh-agent and adding default key."
+		eval "$(ssh-agent -s)"
+		ssh-add ~/.ssh/id_rsa
+	fi
+
+	ssh_args="--ssh=default"
 fi
 
 echo "Invoking docker build with host entry ${metadata_host}:${metadata_ip}"
