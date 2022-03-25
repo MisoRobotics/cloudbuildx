@@ -33,9 +33,11 @@ if [ -n "${network}" ]; then
 	driver_opts="${driver_opts},network=${network}"
 fi
 
-echo "Running user mode emulation of selected binfmt(s) with QEMU."
-docker run ${run_args} "linuxkit/binfmt:${binfmt_version}"
-docker run ${run_args} --rm multiarch/qemu-user-static --reset -p yes
+if [ -n "${MULTIARCH}" ]; then
+	echo "Running user mode emulation of selected binfmt(s) with QEMU."
+	docker run ${run_args} "linuxkit/binfmt:${binfmt_version}"
+	docker run ${run_args} --rm multiarch/qemu-user-static --reset -p yes
+fi
 
 echo "Creating BuildKit builder on ${network} network."
 export DOCKER_BUILDKIT=1 DOCKER_CLI_EXPERIMENTAL=enabled

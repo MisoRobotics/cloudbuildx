@@ -21,4 +21,6 @@ LABEL maintainer="Ryan Sinnet" \
     description="Build multiarch containers on Google Cloud Build with Moby BuildKit, Docker Buildx, and QEMU." \
     version="1.1.0"
 
+ARG MULTIARCH=
+ENV MULTIARCH=${MULTIARCH}
 STOPSIGNAL SIGTERM

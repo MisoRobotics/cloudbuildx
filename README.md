@@ -55,6 +55,8 @@ steps:
 
 The following environment variables can be set to configure functionality:
 
+- `MULTIARCH`: Launch QEMU to emulate additional architectures.
+
 - `DISABLE_SSH`: Do not start and forward an SSH agent during build. If this
   parameter is an empty string, then an SSH agent will be started and forwarded
   to Buildkit via the `docker build --ssh=default` option.
