@@ -7,6 +7,7 @@ ARG BUILDX_VERSION=0.8.1
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.15/community" >> /etc/apk/repositories \
     && apk update -U --no-cache && apk add --no-cache bind-tools curl openssh docker-cli \
     && curl -fSsLo /usr/bin/buildx https://github.com/docker/buildx/releases/download/v${BUILDX_VERSION}/buildx-v${BUILDX_VERSION}.linux-amd64 \
+    && curl -fSsLo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.25.1/yq_linux_amd64 && chmod +x /usr/local/bin/yq \
     && chmod a+x /usr/bin/buildx \
     && gcloud auth configure-docker asia-docker.pkg.dev,eu-docker.pkg.dev,us-docker.pkg.dev,gcr.io,asia.gcr.io,eu.gcr.io,us.gcr.io \
     && rm -rf /lib/apk/db/scripts.tar \
