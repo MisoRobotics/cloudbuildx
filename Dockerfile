@@ -19,7 +19,7 @@ LABEL maintainer="Ryan Sinnet" \
     github.account="https://github.com/MisoRobotics" \
     dockerfile.github.page="https://github.com/MisoRobotics/cloudbuildx/blob/main/Dockerfile" \
     description="Build multiarch containers on Google Cloud Build with Moby BuildKit, Docker Buildx, and QEMU." \
-    version="1.1.0"
+    version="2.0.1"
 
 ARG MULTIARCH=
 ENV MULTIARCH=${MULTIARCH}
