@@ -68,7 +68,9 @@ if [ -z "${DISABLE_SSH}" ]; then
 		echo "Instantiating ssh-agent and adding default key."
 		eval "$(ssh-agent -s)"
 		ssh-add ~/.ssh/id_rsa
-		ssh-keyscan github.com >>~/.ssh/known_hosts
+		ssh-keyscan github.com >/etc/ssh/ssh_known_hosts
+		dig -t a +short github.com | grep ^[0-9] | xargs -r -n1 ssh-keyscan \
+			>>/etc/ssh/ssh_known_hosts
 		git submodule update --init --recursive || true
 	fi
 
