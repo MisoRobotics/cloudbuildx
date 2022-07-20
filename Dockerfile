@@ -2,7 +2,7 @@
 FROM gcr.io/cloudified/cloud-sdk:alpine
 
 WORKDIR /
-ARG BUILDX_VERSION=0.8.1
+ARG BUILDX_VERSION=0.8.2
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.15/community" >> /etc/apk/repositories \
     && apk update -U --no-cache && apk add --no-cache bind-tools curl openssh docker-cli \
