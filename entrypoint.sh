@@ -60,7 +60,7 @@ if [ -z "${DISABLE_SSH}" ]; then
 			args="${args} --project=${SSH_SECRET_PROJECT}"
 		fi
 		mkdir -m0700 -p ~/.ssh
-		gcloud secrets versions access latest ${args} > ~/.ssh/id_rsa
+		gcloud secrets versions access latest ${args} >~/.ssh/id_rsa
 		chmod 400 ~/.ssh/id_rsa
 	fi
 
@@ -68,6 +68,8 @@ if [ -z "${DISABLE_SSH}" ]; then
 		echo "Instantiating ssh-agent and adding default key."
 		eval "$(ssh-agent -s)"
 		ssh-add ~/.ssh/id_rsa
+		ssh-keyscan github.com >>~/.ssh/known_hosts
+		git submodule update --init --recursive || true
 	fi
 
 	ssh_args="--ssh=default"
