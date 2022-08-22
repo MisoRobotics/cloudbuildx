@@ -54,6 +54,9 @@ metadata_host=metadata.google.internal
 metadata_ip="$(dig +short "${metadata_host}")"
 
 if [ -z "${DISABLE_SSH}" ]; then
+	# Use SSH for all GitHub authentication if not disabled.
+	git config --global url."git@github.com:".insteadOf "https://github.com/"
+
 	if [ -n "${SSH_SECRET_ID}" ]; then
 		args="--secret=${SSH_SECRET_ID}"
 		if [ -n "${SSH_SECRET_PROJECT}" ]; then
@@ -68,8 +71,10 @@ if [ -z "${DISABLE_SSH}" ]; then
 		echo "Instantiating ssh-agent and adding default key."
 		eval "$(ssh-agent -s)"
 		ssh-add ~/.ssh/id_rsa
-		ssh-keyscan github.com >>~/.ssh/known_hosts
-		git submodule update --init --recursive || true
+		ssh-keyscan github.com >/etc/ssh/ssh_known_hosts
+		dig -t a +short github.com | grep ^[0-9] | xargs -r -n1 ssh-keyscan \
+			>>/etc/ssh/ssh_known_hosts
+		git submodule update --init --recursive --remote || true
 	fi
 
 	ssh_args="--ssh=default"
