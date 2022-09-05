@@ -74,7 +74,7 @@ if [ -z "${DISABLE_SSH}" ]; then
 		ssh-keyscan github.com >/etc/ssh/ssh_known_hosts
 		dig -t a +short github.com | grep ^[0-9] | xargs -r -n1 ssh-keyscan \
 			>>/etc/ssh/ssh_known_hosts
-		git submodule update --init --recursive --remote || true
+		git submodule update --init --recursive || true
 	fi
 
 	ssh_args="--ssh=default"
