@@ -42,7 +42,6 @@ fi
 echo "Creating BuildKit builder on ${network} network."
 export DOCKER_BUILDKIT=1 DOCKER_CLI_EXPERIMENTAL=enabled
 buildx create --use --name=mybuilder \
-	--driver=docker-container \
 	--driver-opt="${driver_opts}" \
 	--buildkitd-flags '--allow-insecure-entitlement network.host'
 buildx inspect --bootstrap
