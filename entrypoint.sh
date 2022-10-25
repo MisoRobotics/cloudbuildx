@@ -23,7 +23,7 @@
 # This script is intended for use on Google Cloud Build.
 network=cloudbuild
 binfmt_version=v0.8
-buildkit_version=v0.10.3
+buildkit_version=v0.10.5
 
 run_args="--privileged"
 driver_opts="image=moby/buildkit:${buildkit_version}"
@@ -41,7 +41,9 @@ fi
 
 echo "Creating BuildKit builder on ${network} network."
 export DOCKER_BUILDKIT=1 DOCKER_CLI_EXPERIMENTAL=enabled
-buildx create --use --name=mybuilder --driver-opt="${driver_opts}" \
+buildx create --use --name=mybuilder \
+	--driver=docker-container \
+	--driver-opt="${driver_opts}" \
 	--buildkitd-flags '--allow-insecure-entitlement network.host'
 buildx inspect --bootstrap
 
