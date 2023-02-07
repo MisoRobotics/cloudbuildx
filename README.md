@@ -69,6 +69,9 @@ The following environment variables can be set to configure functionality:
 - `SSH_SECRET_PROJECT`: If set, specify the GCP project when fetching the
   secret.
 
+- `BUILDER`: Specify for multiple builders in the same environment. 
+  Defaults to `mybuilder`  
+
 Note that technically the above shell parameters do not _have_ to be exported
 to the environment, but you're probably going to set them using the
 [`env`](https://cloud.google.com/build/docs/build-config-file-schema#env) key
