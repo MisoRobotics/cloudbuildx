@@ -24,6 +24,7 @@
 network=cloudbuild
 binfmt_version=v0.8
 buildkit_version=v0.10.5
+builder="${BUILDER:-mybuilder}"
 
 run_args="--privileged"
 driver_opts="image=moby/buildkit:${buildkit_version}"
@@ -41,10 +42,10 @@ fi
 
 echo "Creating BuildKit builder on ${network} network."
 export DOCKER_BUILDKIT=1 DOCKER_CLI_EXPERIMENTAL=enabled
-buildx create --use --name=mybuilder \
+buildx create --use --name="${builder}" \
 	--driver-opt="${driver_opts}" \
 	--buildkitd-flags '--allow-insecure-entitlement network.host'
-buildx inspect --bootstrap
+buildx inspect --builder "${builder}" --bootstrap
 
 # Buildkit creates the builder on the cloudbuild network, so use host-mode
 # networking to reuse the network stack of the builder container.
@@ -83,5 +84,6 @@ fi
 
 echo "Invoking docker build with host entry ${metadata_host}:${metadata_ip}"
 buildx build \
+	--builder "${builder}" \
 	--add-host "${metadata_host}:${metadata_ip}" \
 	"${ssh_args}" --allow=network.host --network=host "$@"
