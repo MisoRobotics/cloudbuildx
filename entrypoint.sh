@@ -23,7 +23,7 @@
 # This script is intended for use on Google Cloud Build.
 network=cloudbuild
 binfmt_version=v0.8
-buildkit_version=v0.10.5
+buildkit_version=v0.12.4
 builder="${BUILDER:-mybuilder}"
 
 run_args="--privileged"
